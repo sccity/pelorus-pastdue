@@ -1,0 +1,18 @@
+openapi: 3.0.0
+info:
+  title: Pelorus Past Due Balance API
+  version: 1.0.0
+  description: |-
+    Returns accounts and account information from Pelorus that are past due on their utilities
+    
+    [Santa Clara City](https://www.santaclarautah.gov)
+servers:
+  - url: /
+paths:
+  /accounts:
+    get:
+      summary: Account List
+      description: Account Endpoint
+      responses:
+        '200':
+          description: Success!
