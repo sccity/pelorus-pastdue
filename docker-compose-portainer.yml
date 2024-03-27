@@ -1,0 +1,16 @@
+version: '3'
+services:
+  pelorus-pastdue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sccity/pelorus-pastdue:latest
+    container_name: pelorus-pastdue
+    environment:
+      - TZ=America/Denver
+    ports:
+      - "8080:5000"
+    volumes:
+      - "/etc/sccity/pelorus-pastdue.env:/app/.env:ro"
+    restart: unless-stopped
+    user: "1435:1435" 
