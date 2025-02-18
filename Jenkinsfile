@@ -4,7 +4,7 @@ pipeline {
             label "${env.JOB_NAME}-${BUILD_NUMBER}"
             containerTemplate {
                 name 'jnlp'
-                image 'sccity/jenkins-agent-python:0.0.3'
+                image 'sccity/jenkins-agent-python:0.0.4'
             }
         }
     }
