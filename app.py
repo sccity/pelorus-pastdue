@@ -25,6 +25,24 @@ import api as a
 from api.settings import env, version_data
 from flask_swagger_ui import get_swaggerui_blueprint
 
+if len(sys.argv) == 1:
+    args = sys.argv
+
+elif len(sys.argv) == 2:
+    args = sys.argv
+    arg1 = sys.argv[1]
+    arg2 = ""
+
+elif len(sys.argv) == 3:
+    args = sys.argv
+    arg1 = sys.argv[1]
+    arg2 = sys.argv[2]
+
+else:
+    args = ""
+    arg1 = ""
+    arg2 = ""
+
 app = a.api()
 api = Api(app)
 
@@ -62,6 +80,10 @@ def HttpRoot():
 
 
 api.add_resource(a.Accounts, "/accounts")
+
+if arg1.lower() == "--check-config":
+    print("Just making sure everything works!")
+    exit(0)
 
 if __name__ == "__main__":
     from waitress import serve
