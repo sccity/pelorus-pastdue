@@ -11,6 +11,8 @@ withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable:
     echo "Using Commit Hash: $commit_hash for Docker build"
     echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
+    rm -fR .env
+
     docker build --platform linux/x86_64 -t sccity/pelorus-pastdue:$commit_hash --push .
 
     if [ $? -ne 0 ]; then
