@@ -3,6 +3,10 @@ withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
     commit_hash=$(cat commit_hash.txt)
     branch=$(cat branch.txt)
 
+    namespace="ancillary-services"
+    container="pelorus-pastdue"
+    image="sccity/pelorus-pastdue"
+
     if [ "$branch" = "dev" ]; then
         exit 0
     elif [ "$branch" = "prod" ]; then
@@ -15,17 +19,23 @@ withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
     chmod +x kubectl
 
-    ./kubectl --kubeconfig $KUBECONFIG set image deployment/$DEPLOYMENT pelorus-pastdue=sccity/pelorus-pastdue:$commit_hash -n ancillary-services
+    ./kubectl get deployments -n $namespace
+
+    ./kubectl -n $namespace \
+        set image "deployment/$DEPLOYMENT" \
+        "$container=$image:$commit_hash-$branch"
 
     if [ $? -ne 0 ]; then
-        echo "Error: Kubernetes update failed!"
+        echo "Error: Kubernetes Update Failed!"
         exit 1
     fi
 
-    ./kubectl --kubeconfig $KUBECONFIG rollout status deployment/$DEPLOYMENT -n ancillary-services
+    ./kubectl -n $namespace \
+        rollout status deployment/$DEPLOYMENT \
+        -n $namespace
 
     if [ $? -ne 0 ]; then
-        echo "Error: Kubernetes rollout failed!"
+        echo "Error: Kubernetes Rollout Failed!"
         exit 1
     fi
     '''
